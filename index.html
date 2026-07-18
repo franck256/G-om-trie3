@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur d'Exercices de Géométrie - 5ème</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2bc0e4;
+            --success: #2ecc71;
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 650px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--dark);
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background-color: #ecf0f1;
+            border-radius: 3px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            width: 20%;
+            transition: width 0.4s ease;
+        }
+
+        .exercise-card {
+            display: none;
+        }
+
+        .exercise-card.active {
+            display: block;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .badge.easy { background-color: #2ecc71; }
+        .badge.medium { background-color: #f39c12; }
+        .badge.hard { background-color: #e74c3c; }
+
+        .figure-container {
+            text-align: center;
+            background: var(--light);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .questions-list {
+            margin-bottom: 20px;
+        }
+
+        .question-item {
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 6px;
+            resize: vertical;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .btn-validate {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-validate:hover { background-color: #27ae60; }
+
+        .btn-next {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-next:hover { background-color: #2980b9; }
+
+        .solution-box {
+            display: none;
+            background-color: #e8f8f5;
+            border-left: 5px solid var(--success);
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 0 8px 8px 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .solution-box.visible {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Exercices de Géométrie - 5ème</h1>
+    <div class="subtitle">Sujet personnalisé dynamiquement pour chaque élève</div>
+    
+    <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+    </div>
+
+    <!-- EXERCICE 1 -->
+    <div class="exercise-card active" id="ex1">
+        <span class="badge easy">Difficulté: Facile (Triangles & Angles)</span>
+        <h3>Exercice 1: Triangles et angles</h3>
+        <p id="ex1-text"></p>
+        
+        <div class="figure-container">
+            <svg width="250" height="150" viewBox="0 0 250 150">
+                <polygon points="30,130 200,130 30,30" fill="none" stroke="#2c3e50" stroke-width="2"/>
+                <polygon points="30,120 40,120 40,130" fill="none" stroke="#e74c3c" stroke-width="1.5"/>
+                <text x="15" y="140" font-weight="bold">A</text>
+                <text x="210" y="140" font-weight="bold" id="ex1-svg-B">B</text>
+                <text x="15" y="25" font-weight="bold" id="ex1-svg-C">C</text>
+            </svg>
+        </div>
+
+        <div class="questions-list" id="ex1-questions"></div>
+        <div class="solution-box" id="ex1-solution"></div>
+    </div>
+
+    <!-- EXERCICE 2 -->
+    <div class="exercise-card" id="ex2">
+        <span class="badge medium">Difficulté: Moyenne (Cercle & Angles)</span>
+        <h3>Exercice 2: Cercle et angles</h3>
+        <p id="ex2-text"></p>
+        
+        <div class="figure-container">
+            <svg width="200" height="200" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="70" fill="none" stroke="#2c3e50" stroke-width="2"/>
+                <circle cx="100" cy="100" r="3" fill="#2c3e50"/>
+                <line x1="100" y1="100" x2="160" y2="64" stroke="#2c3e50" stroke-width="2"/>
+                <line x1="100" y1="100" x2="40" y2="64" stroke="#2c3e50" stroke-width="2"/>
+                <line x1="160" y1="64" x2="100" y2="170" stroke="#7f8c8d" stroke-dasharray="4" stroke-width="1.5"/>
+                <line x1="40" y1="64" x2="100" y2="170" stroke="#7f8c8d" stroke-dasharray="4" stroke-width="1.5"/>
+                <text x="100" y="90" font-weight="bold">O</text>
+                <text x="165" y="60" font-weight="bold">A</text>
+                <text x="25" y="60" font-weight="bold">B</text>
+                <text x="95" y="185" font-weight="bold">C</text>
+                <text x="85" y="120" font-size="12" fill="#e67e22" id="ex2-svg-angle">120°</text>
+            </svg>
+        </div>
+
+        <div class="questions-list" id="ex2-questions"></div>
+        <div class="solution-box" id="ex2-solution"></div>
+    </div>
+
+    <!-- EXERCICE 3 -->
+    <div class="exercise-card" id="ex3">
+        <span class="badge medium">Difficulté: Moyenne (Symétrie Axiale)</span>
+        <h3>Exercice 3: Symétrie axiale</h3>
+        <p id="ex3-text"></p>
+        
+        <div class="figure-container">
+            <svg width="250" height="180" viewBox="0 0 250 180">
+                <line x1="20" y1="90" x2="230" y2="90" stroke="#95a5a6" stroke-dasharray="4" stroke-width="1.5"/>
+                <polygon points="90,30 50,90 200,90" fill="none" stroke="#2c3e50" stroke-width="2"/>
+                <polygon points="90,150 50,90 200,90" fill="none" stroke="#3498db" stroke-dasharray="3" stroke-width="1.5"/>
+                <line x1="90" y1="30" x2="90" y2="150" stroke="#e74c3c" stroke-dasharray="2"/>
+                <text x="85" y="25" font-weight="bold">A</text>
+                <text x="35" y="95" font-weight="bold">B</text>
+                <text x="205" y="95" font-weight="bold">C</text>
+                <text x="85" y="165" font-weight="bold" fill="#3498db">A'</text>
+                <text x="215" y="85" font-size="12" fill="#7f8c8d">(BC)</text>
+            </svg>
+        </div>
+
+        <div class="questions-list" id="ex3-questions"></div>
+        <div class="solution-box" id="ex3-solution"></div>
+    </div>
+
+    <!-- EXERCICE 4 -->
+    <div class="exercise-card" id="ex4">
+        <span class="badge medium">Difficulté: Moyenne (Aires & Périmètres)</span>
+        <h3>Exercice 4: Aires et périmètres</h3>
+        <p id="ex4-text"></p>
+        
+        <div class="figure-container">
+            <svg width="250" height="180" viewBox="0 0 250 180">
+                <rect x="20" y="20" width="210" height="140" fill="#bdc3c7" stroke="#2c3e50" stroke-width="1.5"/>
+                <rect x="40" y="40" width="170" height="100" fill="#2ecc71" stroke="#2c3e50" stroke-width="1.5"/>
+                <text x="110" y="95" fill="white" font-weight="bold">Terrain</text>
+                <text x="100" y="135" font-size="12" id="ex4-svg-L">15 m</text>
+                <text x="45" y="95" font-size="12" transform="rotate(-90 45,95)" id="ex4-svg-l">10 m</text>
+                <text x="110" y="35" font-size="11" fill="#c0392b" id="ex4-svg-a">Allée (1 m)</text>
+            </svg>
+        </div>
+
+        <div class="questions-list" id="ex4-questions"></div>
+        <div class="solution-box" id="ex4-solution"></div>
+    </div>
+
+    <!-- EXERCICE 5 -->
+    <div class="exercise-card" id="ex5">
+        <span class="badge hard">Difficulté: Difficile (Théorème de Pythagore)</span>
+        <h3>Exercice 5: Théorème de Pythagore</h3>
+        <p id="ex5-text"></p>
+        
+        <div class="figure-container">
+            <svg width="220" height="220" viewBox="0 0 220 220">
+                <circle cx="110" cy="110" r="100" fill="none" stroke="#7f8c8d" stroke-dasharray="4"/>
+                <polygon points="50,190 170,30 50,30" fill="none" stroke="#2c3e50" stroke-width="2"/>
+                <polygon points="50,40 60,40 60,30" fill="none" stroke="#e74c3c" stroke-width="1.5"/>
+                <text x="35" y="25" font-weight="bold">A</text>
+                <text x="35" y="200" font-weight="bold" id="ex5-svg-ab">B</text>
+                <text x="180" y="25" font-weight="bold" id="ex5-svg-ac">C</text>
+                <text x="115" y="120" font-size="12" fill="#2980b9" id="ex5-svg-question">?</text>
+            </svg>
+        </div>
+
+        <div class="questions-list" id="ex5-questions"></div>
+        <div class="solution-box" id="ex5-solution"></div>
+    </div>
+
+    <!-- BOUTONS D'ACTION -->
+    <div class="actions">
+        <button class="btn-validate" onclick="validateExercise()">Valider / Voir Solution</button>
+        <button class="btn-next" onclick="nextExercise()">Passer »</button>
+    </div>
+</div>
+
+<script>
+    let currentStep = 1;
+    const totalSteps = 5;
+
+    // Utilitaires de génération aléatoire
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    function getRandomChoice(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    // --- GÉNÉRATION EXERCICE 1 ---
+    const angleConnu = getRandomInt(25, 65);
+    const typeFocalisationEx1 = getRandomChoice(['demande_C', 'demande_B']); 
+    let ex1HtmlQuestions = "";
+    let ex1HtmlSolution = "";
+
+    if (typeFocalisationEx1 === 'demande_C') {
+        document.getElementById('ex1-text').innerText = `Soit ABC un triangle rectangle en A. L'angle B mesure ${angleConnu}°.`;
+        document.getElementById('ex1-svg-B').innerText = `B (${angleConnu}°)`;
+        document.getElementById('ex1-svg-C').innerText = `C`;
+        
+        let repC = 90 - angleConnu;
+        let isocelTxt = (repC === 45) ? "Les deux angles aigus mesurent 45°. Le triangle possède deux angles égaux, il <b>est donc isocèle</b> en A." : `Les angles mesurent 90°, ${angleConnu}° et ${repC}°. N'ayant pas deux angles égaux, le triangle <b>n'est pas isocèle</b>.`;
+        
+        ex1HtmlQuestions = `
+            <div class="question-item"><div class="question-text">1. Calculer la mesure de l'angle C.</div><textarea rows="2"></textarea></div>
+            <div class="question-item"><div class="question-text">2. Le triangle ABC est-il isocèle ? Justifier.</div><textarea rows="2"></textarea></div>`;
+        ex1HtmlSolution = `<strong>Solution :</strong><br>1. La somme des angles d'un triangle vaut 180°. L'angle droit A vaut 90°. Donc angle C = 180° - (90° + ${angleConnu}°) = <b>${repC}°</b>.<br>2. ${isocelTxt}`;
+    } else {
+        document.getElementById('ex1-text').innerText = `Soit ABC un triangle rectangle en A. L'angle C mesure ${angleConnu}°.`;
+        document.getElementById('ex1-svg-B').innerText = `B`;
+        document.getElementById('ex1-svg-C').innerText = `C (${angleConnu}°)`;
+        
+        let repB = 90 - angleConnu;
+        let isocelTxt = (repB === 45) ? "Les deux angles aigus mesurent 45°. Le triangle possède deux angles égaux, il <b>est donc isocèle</b> en A." : `Les angles mesurent 90°, ${repB}° et ${angleConnu}°. N'ayant pas deux angles égaux, le triangle <b>n'est pas isocèle</b>.`;
+        
+        ex1HtmlQuestions = `
+            <div class="question-item"><div class="question-text">1. Calculer la mesure de l'angle B.</div><textarea rows="2"></textarea></div>
+            <div class="question-item"><div class="question-text">2. Le triangle ABC est-il isocèle ? Justifier.</div><textarea rows="2"></textarea></div>`;
+        ex1HtmlSolution = `<strong>Solution :</strong><br>1. La somme des angles d'un triangle vaut 180°. L'angle droit A vaut 90°. Donc angle B = 180° - (90° + ${angleConnu}°) = <b>${repB}°</b>.<br>2. ${isocelTxt}`;
+    }
+    document.getElementById('ex1-questions').innerHTML = ex1HtmlQuestions;
+    document.getElementById('ex1-solution').innerHTML = ex1HtmlSolution;
+
+
+    // --- GÉNÉRATION EXERCICE 2 ---
+    const rayonCercle = getRandomInt(3, 9);
+    const angleCentre = getRandomChoice([60, 90, 120, 180]);
+    const typeQuestionEx2 = getRandomChoice(['demande_arc', 'demande_aire_secteur']);
+    
+    document.getElementById('ex2-text').innerText = `Soit un cercle de centre O et de rayon ${rayonCercle} cm. A et B sont deux points du cercle tels que l'angle au centre AOB mesure ${angleCentre}°.`;
+    document.getElementById('ex2-svg-angle').innerText = `${angleCentre}°`;
+
+    let perimetreCercle = (2 * Math.PI * rayonCercle).toFixed(1);
+    let aireCercle = (Math.PI * rayonCercle * rayonCercle).toFixed(1);
+    let fractionCercle = 360 / angleCentre;
+    let longArc = (perimetreCercle / fractionCercle).toFixed(2);
+    let aireSecteur = (aireCercle / fractionCercle).toFixed(2);
+    let angleInscrit = angleCentre / 2;
+
+    let ex2Q1 = "";
+    let ex2S1 = "";
+    if (typeQuestionEx2 === 'demande_arc') {
+        ex2Q1 = `<div class="question-item"><div class="question-text">1. Calculer la longueur de l'arc de cercle AB (arrondir au centième).</div><textarea rows="2"></textarea></div>`;
+        ex2S1 = `1. Le périmètre complet vaut 2 × pi × ${rayonCercle} ≈ ${perimetreCercle} cm. L'angle de ${angleCentre}° représente 1/${fractionCercle}ème du cercle (360 / ${angleCentre}). La longueur de l'arc AB est donc de ${perimetreCercle} / ${fractionCercle} ≈ <b>${longArc} cm</b>.<br>`;
+    } else {
+        ex2Q1 = `<div class="question-item"><div class="question-text">1. Calculer l'aire de la portion de cercle (secteur angulaire AOB) délimitée par cet angle (arrondir au centième).</div><textarea rows="2"></textarea></div>`;
+        ex2S1 = `1. L'aire complète du disque vaut pi × ${rayonCercle}² ≈ ${aireCercle} cm². L'angle de ${angleCentre}° représente 1/${fractionCercle}ème du cercle. L'aire de la portion vaut donc ${aireCercle} / ${fractionCercle} ≈ <b>${aireSecteur} cm²</b>.<br>`;
+    }
+
+    document.getElementById('ex2-questions').innerHTML = ex2Q1 + `
+        <div class="question-item"><div class="question-text">2. Si C est un point du cercle tel que l'angle ACB est inscrit dans le cercle et intercepte le même arc, quelle est sa mesure ?</div><textarea rows="2"></textarea></div>`;
+    
+    document.getElementById('ex2-solution').innerHTML = `<strong>Solution :</strong><br>${ex2S1}2. Un angle inscrit mesure la moitié de l'angle au centre qui intercepte le même arc. Donc l'angle ACB = ${angleCentre}° / 2 = <b>${angleInscrit}°</b>.`;
+
+
+    // --- GÉNÉRATION EXERCICE 3 ---
+    const coteBC = getRandomInt(4, 7);
+    const coteAC = getRandomInt(3, 5);
+    const coteAB = coteAC + getRandomInt(1, 3); // respect de l'inégalité triangulaire
+    const typeQuestionEx3 = getRandomChoice(['demande_perimetre', 'demande_nature']);
+
+    document.getElementById('ex3-text').innerText = `Soit un triangle ABC tel que AB = ${coteAB} cm, BC = ${coteBC} cm et AC = ${coteAC} cm. On considère la symétrie axiale par rapport à la droite (BC).`;
+    
+    let ex3Q = `<div class="question-item"><div class="question-text">1. Expliquer brièvement comment construire le symétrique A' du point A par rapport à la droite (BC).</div><textarea rows="2"></textarea></div>`;
+    let ex3S = `1. Pour construire A', on trace la perpendiculaire à la droite (BC) passant par A, puis on reporte la même distance de l'autre côté de (BC).<br>`;
+    
+    if (typeQuestionEx3 === 'demande_perimetre') {
+        let perimetreEx3 = (coteAB + coteAC) * 2;
+        ex3Q += `<div class="question-item"><div class="question-text">2. Calculer le périmètre du quadrilatère ABA'C ainsi formé. Justifier.</div><textarea rows="2"></textarea></div>`;
+        ex3S += `2. La symétrie axiale conserve les distances. Donc BA' = AB = ${coteAB} cm et CA' = AC = ${coteAC} cm. Le périmètre du quadrilatère ABA'C vaut donc ${coteAB} + ${coteAB} + ${coteAC} + ${coteAC} = <b>${perimetreEx3} cm</b>.`;
+    } else {
+        ex3Q += `<div class="question-item"><div class="question-text">2. Quelle est la nature exacte du quadrilatère ABA'C ? Justifier à l'aide d'une propriété.</div><textarea rows="2"></textarea></div>`;
+        ex3S += `2. Par symétrie, les longueurs sont conservées : BA' = AB = ${coteAB} cm et CA' = AC = ${coteAC} cm. Le quadrilatère ABA'C possède deux paires de côtés consécutifs de même longueur, c'est donc un <b>cerf-volant</b>.`;
+    }
+    document.getElementById('ex3-questions').innerHTML = ex3Q;
+    document.getElementById('ex3-solution').innerHTML = `<strong>Solution :</strong><br>${ex3S}`;
+
+
+    // --- GÉNÉRATION EXERCICE 4 ---
+    const terrainL = getRandomInt(12, 25);
+    const terrainl = getRandomInt(8, 15);
+    const alleeW = getRandomChoice([1, 2]);
+
+    document.getElementById('ex4-text').innerText = `Un terrain rectangulaire a pour dimensions ${terrainL} m sur ${terrainl} m. On souhaite construire une allée de ${alleeW} m de large tout autour de ce terrain.`;
+    document.getElementById('ex4-svg-L').innerText = `${terrainL} m`;
+    document.getElementById('ex4-svg-l').innerText = `${terrainl} m`;
+    document.getElementById('ex4-svg-a').innerText = `Allée (${alleeW} m)`;
+
+    let aireInitiale = terrainL * terrainl;
+    let grandL = terrainL + (2 * alleeW);
+    let grandl = terrainl + (2 * alleeW);
+    let aireTotale = grandL * grandl;
+    let aireAllee = aireTotale - aireInitiale;
+    let pourcentageAllee = ((aireAllee / aireTotale) * 100).toFixed(2);
+
+    document.getElementById('ex4-questions').innerHTML = `
+        <div class="question-item"><div class="question-text">1. Calculer l'aire du terrain initial (sans l'allée).</div><textarea rows="2"></textarea></div>
+        <div class="question-item"><div class="question-text">2. Calculer l'aire totale occupée uniquement par l'allée.</div><textarea rows="2"></textarea></div>
+        <div class="question-item"><div class="question-text">3. Quel pourcentage de l'aire totale (terrain + allée) représente cette allée ?</div><textarea rows="2"></textarea></div>`;
+    
+    document.getElementById('ex4-solution').innerHTML = `
+        <strong>Solution :</strong><br>
+        1. Aire initiale = ${terrainL} × ${terrainl} = <b>${aireInitiale} m²</b>.<br>
+        2. L'allée entoure le terrain des deux côtés. Le grand rectangle mesure donc (${terrainL} + ${alleeW} + ${alleeW}) = ${grandL} m de long et (${terrainl} + ${alleeW} + ${alleeW}) = ${grandl} m de large.<br>
+        Aire totale = ${grandL} × ${grandl} = ${aireTotale} m².<br>
+        Aire allée = Aire totale - Aire initiale = ${aireTotale} - ${aireInitiale} = <b>${aireAllee} m²</b>.<br>
+        3. Pourcentage = (${aireAllee} / ${aireTotale}) × 100 ≈ <b>${pourcentageAllee} %</b>.`;
+
+
+    // --- GÉNÉRATION EXERCICE 5 ---
+    // Choix entre deux triplets pythagoriciens pour éviter les racines interminables si on le souhaite, ou calcul classique
+    const triplet = getRandomChoice([[6, 8, 10], [5, 12, 13], [9, 12, 15]]);
+    const valAB = triplet[0];
+    const valAC = triplet[1];
+    const valBC = triplet[2];
+    
+    const typeQuestionEx5 = getRandomChoice(['cherche_hypotenuse', 'cherche_cote_droit']);
+
+    if (typeQuestionEx5 === 'cherche_hypotenuse') {
+        document.getElementById('ex5-text').innerText = `Soit un triangle ABC rectangle en A tel que AB = ${valAB} cm et AC = ${valAC} cm.`;
+        document.getElementById('ex5-svg-ab').innerText = `B (${valAB}cm)`;
+        document.getElementById('ex5-svg-ac').innerText = `C (${valAC}cm)`;
+        document.getElementById('ex5-svg-question').innerText = `BC = ?`;
+
+        let aireTriangle = (valAB * valAC) / 2;
+
+        document.getElementById('ex5-questions').innerHTML = `
+            <div class="question-item"><div class="question-text">1. Calculer l'hypoténuse BC.</div><textarea rows="2"></textarea></div>
+            <div class="question-item"><div class="question-text">2. Calculer l'aire du triangle ABC.</div><textarea rows="2"></textarea></div>
+            <div class="question-item"><div class="question-text">3. Quel est le diamètre du cercle circonscrit au triangle ABC ? Justifier.</div><textarea rows="2"></textarea></div>`;
+        
+        document.getElementById('ex5-solution').innerHTML = `
+            <strong>Solution :</strong><br>
+            1. D'après le théorème de Pythagore dans le triangle rectangle en A :<br>
+            BC² = AB² + AC² = ${valAB}² + ${valAC}² = ${valAB*valAB} + ${valAC*valAC} = ${valBC*valBC}.<br>
+            Donc BC = racine_carrée(${valBC*valBC}) = <b>${valBC} cm</b>.<br>
+            2. Aire = (base × hauteur) / 2 = (${valAB} × ${valAC}) / 2 = <b>${aireTriangle} cm²</b>.<br>
+            3. Propriété : Le cercle circonscrit à un triangle rectangle a pour diamètre son hypoténuse. Le diamètre est donc égal à BC, soit <b>${valBC} cm</b>.`;
+    } else {
+        // On donne l'hypoténuse BC et le côté AB, on fait chercher AC
+        document.getElementById('ex5-text').innerText = `Soit un triangle ABC rectangle en A tel que l'hypoténuse BC = ${valBC} cm et le côté AB = ${valAB} cm.`;
+        document.getElementById('ex5-svg-ab').innerText = `B (${valAB}cm)`;
+        document.getElementById('ex5-svg-ac').innerText = `C`;
+        document.getElementById('ex5-svg-question').innerText = `BC = ${valBC}cm`;
+
+        let aireTriangle = (valAB * valAC) / 2;
+
+        document.getElementById('ex5-questions').innerHTML = `
+            <div class="question-item"><div class="question-text">1. Calculer la longueur du côté AC.</div><textarea rows="2"></textarea></div>
+            <div class="question-item"><div class="question-text">2. Calculer l'aire du triangle ABC.</div><textarea rows="2"></textarea></div>
+            <div class="question-item"><div class="question-text">3. Quel est le rayon du cercle circonscrit au triangle ABC ? Justifier.</div><textarea rows="2"></textarea></div>`;
+        
+        document.getElementById('ex5-solution').innerHTML = `
+            <strong>Solution :</strong><br>
+            1. D'après le théorème de Pythagore dans le triangle rectangle en A :<br>
+            BC² = AB² + AC² &rArr; ${valBC}² = ${valAB}² + AC² &rArr; ${valBC*valBC} = ${valAB*valAB} + AC².<br>
+            AC² = ${valBC*valBC} - ${valAB*valAB} = ${valAC*valAC}. Donc AC = racine_carrée(${valAC*valAC}) = <b>${valAC} cm</b>.<br>
+            2. Aire = (base × hauteur) / 2 = (${valAB} × ${valAC}) / 2 = <b>${aireTriangle} cm²</b>.<br>
+            3. Propriété : Le diamètre du cercle circonscrit est égal à l'hypoténuse (${valBC} cm). Son rayon est donc la moitié : ${valBC} / 2 = <b>${valBC / 2} cm</b>.`;
+    }
+
+    // --- NAVIGATION ET INTERACTION ---
+    function updateProgressBar() {
+        const progress = document.getElementById('progress');
+        progress.style.width = (currentStep / totalSteps) * 100 + '%';
+    }
+
+    function validateExercise() {
+        const activeCard = document.querySelector('.exercise-card.active');
+        const solutionBox = activeCard.querySelector('.solution-box');
+        solutionBox.classList.add('visible');
+    }
+
+    function nextExercise() {
+        const currentCard = document.getElementById(`ex${currentStep}`);
+        
+        if (currentStep < totalSteps) {
+            currentCard.classList.remove('active');
+            currentStep++;
+            
+            const nextCard = document.getElementById(`ex${currentStep}`);
+            nextCard.classList.add('active');
+            
+            updateProgressBar();
+        } else {
+            alert("Série terminée ! La page va se recharger pour générer de nouveaux problèmes.");
+            window.location.reload(); // Relance une nouvelle série différente
+        }
+    }
+
+    updateProgressBar();
+</script>
+
+</body>
+</html>
